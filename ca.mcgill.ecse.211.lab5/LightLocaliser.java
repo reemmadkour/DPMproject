@@ -162,6 +162,8 @@ public class LightLocaliser{
 				odometer.setX(1.0);
 				odometer.setY(1.0);
 				odometer.setTheta(0.0);
+				navigator.counter_X = 1;
+				navigator.counter_Y = 1;
 		}
 		else if(Lab5.startingCorner == 1) {
 				// Face Forward
@@ -170,11 +172,15 @@ public class LightLocaliser{
 				odometer.setX(7.0);
 				odometer.setY(1.0);
 				odometer.setTheta(0.0);
+				navigator.counter_X = 7;
+				navigator.counter_Y = 1;
 		}
 		else if(Lab5.startingCorner == 2) {
 				odometer.setX(7.0);
 				odometer.setY(7.0);
 				odometer.setTheta(180.0);
+				navigator.counter_X = 7;
+				navigator.counter_Y = 7;
 		}
 		else {
 				// Face Forward
@@ -183,10 +189,13 @@ public class LightLocaliser{
 				odometer.setX(1.0);
 				odometer.setY(7.0);
 				odometer.setTheta(180.0);
+				navigator.counter_X = 1;
+				navigator.counter_Y = 7;
 		}
 		
 		// Change to (Lab5.lowerLeftCorner[0][0], Lab5.lowerLeftCorner[0][1]) later
-//		navigator.travelToLLC(3, 3);
+		navigator.travelToLLC(3, 3);
+		navigator.turnTo(0.0);
 	}
 	
 	

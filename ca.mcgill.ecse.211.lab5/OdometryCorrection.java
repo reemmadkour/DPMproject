@@ -79,10 +79,7 @@ public class OdometryCorrection implements Runnable {
 
 		// If the robot has reached a black line, correct its position
 		if (detectBlack == true) {
-			
-			// TODO Update odometer with new calculated (and more accurate) vales
 			correctPosition();	  		
-//			odometer.setXYT(0.3, 19.23, 5.0);
 		}
       
 		

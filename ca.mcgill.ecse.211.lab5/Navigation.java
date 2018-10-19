@@ -1,6 +1,8 @@
 package ca.mcgill.ecse211.lab5;
 
+import lejos.hardware.Sound;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.robotics.SampleProvider;
 
 public class Navigation extends Thread{
 
@@ -8,22 +10,32 @@ public class Navigation extends Thread{
 	private EV3LargeRegulatedMotor leftMotor;
 	private EV3LargeRegulatedMotor rightMotor;
 	private boolean isNavigating;
-	private double[][] waypoints;
+	private SampleProvider cs;
+	private float[] colorData;
+	private float color;
 
 	private static final double TRACK = Lab5.TRACK;
 	private static final double WHEELRAD = Lab5.WHEEL_RADIUS;
-
-	private static final int FORWARD_SPEED =250;
+	private static final int FORWARD_SPEED = 250;
 	private static final int ROTATE_SPEED = 70;
 
 	private static final double GRID_SIZE = 30.48;
+	private static final double DIST_ERROR = 1.0; //Error between position and destination
+	private final double BLACK_LOWER_BOUND = 0.01;
+	private final double BLACK_UPPER_BOUND = 0.35;
+	
+	private final double DISTANCE_OFFSET = 14.5;
+	
+    int counter_X; // Record the number of black lines in Y direction
+    int counter_Y; // Record the number of black lines in X direction
 
-	public Navigation(Odometer odo,EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor, double[][] waypoints) {
+	public Navigation(Odometer odo,EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor, SampleProvider cs, float[] colorData) {
 		this.odo = odo;
 		this.leftMotor = leftMotor;
 		this.rightMotor = rightMotor;
 		this.isNavigating = true;
-		this.waypoints = waypoints;
+		this.cs = cs;
+		this.colorData = colorData;
 	}
 
 	public void run() {
@@ -119,19 +131,18 @@ public class Navigation extends Thread{
 
 		double currentX = odo.getXYT()[0];
 		double currentY = odo.getXYT()[1];
+		double theta = odo.getXYT()[2];
+		double tolerance = 2.0;
 		
-		while(currentY != y) {
-			if(y<currentY) {
-				leftMotor.forward();
-				rightMotor.forward();
-				leftMotor.setSpeed(FORWARD_SPEED);
-				rightMotor.setSpeed(FORWARD_SPEED);
-			}
-			else {
-				leftMotor.forward();
-				rightMotor.forward();
-				leftMotor.setSpeed(FORWARD_SPEED);
-				rightMotor.setSpeed(FORWARD_SPEED);
+		while(Math.abs(y - currentY) <=DIST_ERROR) {
+			leftMotor.setSpeed(FORWARD_SPEED);
+			rightMotor.setSpeed(FORWARD_SPEED);
+			leftMotor.forward();
+			rightMotor.forward();
+			
+			if ( getColor()>=BLACK_LOWER_BOUND && getColor()<=BLACK_UPPER_BOUND ) {
+				Sound.beep();  // Beep to signal black detection 
+				correctPosition();	
 			}
 		}
 		
@@ -142,24 +153,24 @@ public class Navigation extends Thread{
 			turnTo(90);
 		}
 		
-		while(currentX != x) {
-			if(x<currentX) {
-				leftMotor.forward();
-				rightMotor.forward();
-				leftMotor.setSpeed(FORWARD_SPEED);
-				rightMotor.setSpeed(FORWARD_SPEED);
-			}
-			else {
-				leftMotor.forward();
-				rightMotor.forward();
-				leftMotor.setSpeed(FORWARD_SPEED);
-				rightMotor.setSpeed(FORWARD_SPEED);
+		while(Math.abs(x - currentX) <=DIST_ERROR) {
+			leftMotor.setSpeed(FORWARD_SPEED);
+			rightMotor.setSpeed(FORWARD_SPEED);
+			leftMotor.forward();
+			rightMotor.forward();
+			
+			if ( getColor()>=BLACK_LOWER_BOUND && getColor()<=BLACK_UPPER_BOUND ) {
+				Sound.beep();  // Beep to signal black detection 
+				correctPosition();	
 			}
 		}
-		turnTo(0);
-		
+
+		//after the robot arrived, stop motors
+		leftMotor.setSpeed(0); 
+		rightMotor.setSpeed(0);
 		
 	}
+	
 
 	/**
 	 * Let the robot get to the specified heading by turning a minimal rotation angle
@@ -210,7 +221,6 @@ public class Navigation extends Thread{
 		
 	}
 
-	
 	public boolean isNavigating() {
 		return isNavigating;
 	}
@@ -222,5 +232,60 @@ public class Navigation extends Thread{
 	private int convertAngle(double radius, double width, double angle) {
 		return convertDistance(radius, Math.PI * width * angle / 360.0);
 	}
+	
+	/**
+	 * Retrieve data from the color sensor 
+	 * @return Color sample data from the color sensor
+	 */
+	private float getColor() {
+		cs.fetchSample(colorData, 0);
+		this.color = colorData[0];
+		return this.color;
+	}
+	
+	private void correctPosition() {
+		double x;
+		double y;
+		double theta = odo.getXYT()[2];
+		double tolerance = 2.0;
 
+		// Driving in positive Y direction
+		// current Y position + SENSOR_DIST = corrected Y position
+		if ( Math.abs(theta-360)<=tolerance || Math.abs(theta-0)<= tolerance ) {
+			y = counter_Y*30.48+DISTANCE_OFFSET;
+			counter_Y++;
+			odo.setY(y);
+		}
+
+		// Driving in negative Y direction
+		// current Y position - SENSOR_DIST = corrected Y position
+		else if ( Math.abs(theta-180)<=tolerance ) {
+
+			// The number of black lines in this direction equals that in the positive Y direction
+			// However, y value is decreasing here
+			counter_Y--;
+			y = counter_Y*30.48-DISTANCE_OFFSET;
+			odo.setY(y);
+			
+		}
+
+		// Driving in positive X direction
+		// current X position + SENSOR_DIST = corrected X position
+		else if  (Math.abs(theta-90)<=tolerance) {
+			x = counter_X*30.48+DISTANCE_OFFSET;
+			counter_X++;
+			odo.setX(x);
+
+		}
+
+		// Driving in negative X direction
+		// current X position - SENSOR_DIST = corrected X position
+		else if ( Math.abs(theta-270)<=tolerance) { 
+			counter_X--;
+			x = counter_X*30.48-DISTANCE_OFFSET;
+			odo.setX(x);
+			
+		}
+	}
+  
 }

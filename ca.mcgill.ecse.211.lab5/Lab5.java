@@ -54,7 +54,13 @@ public class Lab5 {
 		SampleProvider usDistance = usSensor.getMode("Distance"); // usDistance provides samples from this instance
 		float[] usData = new float[usDistance.sampleSize()]; // usData is the buffer in which data are returned
 
-		Navigation navigator = new Navigation(odometer, leftMotor, rightMotor, null);
+		
+		// Set up color sensor
+		EV3ColorSensor csSensor = new EV3ColorSensor(csPort2);
+		csSensor.setFloodlight(lejos.robotics.Color.RED);
+		SampleProvider csColor = csSensor.getRedMode();
+		float[] colorData = new float[csColor.sampleSize()];
+		Navigation navigator = new Navigation(odometer, leftMotor, rightMotor, csColor, colorData);
 
 
 		do {
@@ -86,11 +92,6 @@ public class Lab5 {
 			e.printStackTrace();
 		}
         
-		// Set up color sensor
-		EV3ColorSensor csSensor = new EV3ColorSensor(csPort2);
-		csSensor.setFloodlight(lejos.robotics.Color.RED);
-		SampleProvider csColor = csSensor.getRedMode();
-		float[] colorData = new float[csColor.sampleSize()];
 		LightLocaliser lightLocaliser = new LightLocaliser(navigator, odometer, leftMotor, rightMotor, csColor, colorData);	
 		
 		// Start light localization

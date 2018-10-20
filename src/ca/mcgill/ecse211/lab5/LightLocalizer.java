@@ -101,8 +101,8 @@ public class LightLocalizer {
 		odometer.setTheta(0.0);
 		//navigation.counter_X = 1;
 		//navigator.counter_Y = 1;
-}
-else if(Lab5.startingCorner == 1) {
+    }
+    else if(Lab5.startingCorner == 1) {
 		// Face Forward
 		navigation.turnTo(90);
 		
@@ -111,15 +111,15 @@ else if(Lab5.startingCorner == 1) {
 		odometer.setTheta(0.0);
 		//navigator.counter_X = 7;
 		//navigator.counter_Y = 1;
-}
-else if(Lab5.startingCorner == 2) {
+    }
+    else if(Lab5.startingCorner == 2) {
 		odometer.setX(7.0);
 		odometer.setY(7.0);
 		odometer.setTheta(180.0);
 		//navigator.counter_X = 7;
 		//navigator.counter_Y = 7;
-}
-else {
+    }
+    else {
 		// Face Forward
 		navigation.turnTo(90);
 		
@@ -128,7 +128,11 @@ else {
 		odometer.setTheta(180.0);
 		//navigator.counter_X = 1;
 		//navigator.counter_Y = 7;
-}
+    }
+    
+    navigation.travelTo(3, 3,false);
+    
+    navigation.rotateSensorMotor();
  
   }
 

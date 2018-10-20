@@ -23,13 +23,17 @@ public class Lab5 {
       new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
   private static final EV3LargeRegulatedMotor rightMotor =
       new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
+  private static final EV3LargeRegulatedMotor sensorMotor =  new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
 
 
   public static final int targetRing = 0;
-	public static final int startingCorner = 2;
+  public static final int startingCorner = 2;
   public static final double WHEEL_RADIUS = 2.15;
   public static final double TRACK = 10;
   public static final double TAU = 360;
+  
+  public static final int[][] lowerLeftCorner = {{ 0, 0 }};
+  public static final int[][] upperRightCorner = {{ 0, 0 }};
 
   public static void main(String[] args) throws OdometerExceptions {
     int buttonChoice;
@@ -65,19 +69,15 @@ public class Lab5 {
 
   
     t.clear();
-    Odometer odometer;
-	
-		odometer = Odometer.getOdometer(leftMotor, rightMotor, TRACK, WHEEL_RADIUS);
-
-		OdometryDisplay odometryDisplay = new OdometryDisplay(t);
+    Odometer odometer = Odometer.getOdometer(leftMotor, rightMotor, TRACK, WHEEL_RADIUS);
+	OdometryDisplay odometryDisplay = new OdometryDisplay(t);
 	
 	Thread odoThread = new Thread(odometer);
     odoThread.start();
-    Thread odoDisplayThread=new Thread(odometryDisplay);
+    Thread odoDisplayThread = new Thread(odometryDisplay);
     odoDisplayThread.start();
     Navigation navigation =
-        new Navigation(
-            odometer, leftMotor, rightMotor,  Lab5.TRACK,Lab5.WHEEL_RADIUS);
+        new Navigation(odometer, leftMotor, rightMotor, sensorMotor, Lab5.TRACK, Lab5.WHEEL_RADIUS);
 
 
     UltrasonicLocalizer ultrasoniclocal;
@@ -93,8 +93,7 @@ public class Lab5 {
               leftMotor,
               rightMotor, t);
     } else {
-    	//Thread odoThread = new Thread(odometer);
-        //odoThread.start();
+
       ultrasoniclocal =
           new UltrasonicLocalizer(
               odometer,
@@ -107,7 +106,7 @@ public class Lab5 {
     }
     ultrasoniclocal.localize();
 
-    
+    // ************** Change this to wait for 8 seconds **************
     while (Button.waitForAnyPress() != Button.ID_ENTER) ;
 
     // initializing the light localizer

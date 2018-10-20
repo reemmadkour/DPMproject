@@ -6,6 +6,7 @@ import lejos.hardware.Sound;
 import lejos.hardware.lcd.TextLCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.robotics.SampleProvider;
+import lejos.utility.Delay;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -68,8 +69,14 @@ public class UltrasonicLocalizer {
 
     // different methods depending on which edge was selected
     if (localizationType == LocalizationType.FALLING_EDGE) {
+	  // Delay the start time for motor rotation to wait for Ultrasonic sensor to turn on
+	  Delay.msDelay(2000);
+	  
       findFallingEdge();
     } else {
+  	  // Delay the start time for motor rotation to wait for Ultrasonic sensor to turn on
+  	  Delay.msDelay(2000);
+  	  
       findRisingEdge();
     }
   }

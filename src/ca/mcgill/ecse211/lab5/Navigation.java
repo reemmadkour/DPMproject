@@ -14,19 +14,20 @@ import lejos.hardware.Button;
  
  */
 
-
-
 public class Navigation {
 
 	private EV3LargeRegulatedMotor leftMotor;
 	private EV3LargeRegulatedMotor rightMotor;
+	private EV3LargeRegulatedMotor usMotor;
 	
 	private final double TRACK;
 	private final double WHEEL_RAD;
 	public static final double TILE_SIZE=30.48;;
 	public static final int FORWARD_SPEED = 250;
 	private static final int ROTATE_SPEED = 150;
-
+	private final int US_ROTATION = 90; //constant for the US sensor rotation when bang bang starts/stops
+	
+	
 	double dx, dy, dt;
 
 	int i = 0;
@@ -40,7 +41,7 @@ public class Navigation {
 	 * @param WHEEL_RAD is the radius of the wheel
 	 *
 	 */
-		public Navigation(Odometer odometer,EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor,
+		public Navigation(Odometer odometer,EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor, EV3LargeRegulatedMotor sensorMotor,
 				final double TRACK, final double WHEEL_RAD) { // constructor
 			this.odometer = odometer;
 			this.leftMotor = leftMotor;
@@ -49,15 +50,16 @@ public class Navigation {
 			//odometer.setXYT(0 , 0 , 0);
 			this.TRACK = TRACK;
 			this.WHEEL_RAD = WHEEL_RAD;
-			
+			this.usMotor = sensorMotor;	
 		}
 
 
 		private static double odoAngle = 0;
 		/**
-		 * @param x :  waypoint x coordinate
-		 * @param y:   waypoint y coordinate
-		 * @param obs:boolean for i we are avoiding an obstacle or not
+		 * Let the robot travel to the specified destination
+		 * @param x The x value of the destination
+		 * @param y The y value of the destination
+		 * @param obs If 
 		 */
 		void travelTo(double x, double y,boolean obs) {
 			double calcTheta = 0, len = 0, deltaX = 0, deltaY = 0;
@@ -179,5 +181,10 @@ public class Navigation {
   public void advance(long distance) {
     leftMotor.rotate(convertDistance(Lab5.WHEEL_RADIUS, distance), true);
     rightMotor.rotate(convertDistance(Lab5.WHEEL_RADIUS, distance), false);
+  }
+  
+  public void rotateSensorMotor() {
+	  usMotor.setSpeed(ROTATE_SPEED);
+	  usMotor.rotate(US_ROTATION);
   }
 }

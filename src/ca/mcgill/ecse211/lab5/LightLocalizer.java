@@ -1,9 +1,11 @@
 package ca.mcgill.ecse211.lab5;
 
+import lejos.hardware.Button;
 import lejos.hardware.Sound;
 import lejos.hardware.lcd.TextLCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.sensor.EV3ColorSensor;
+import lejos.utility.Delay;
 
 import java.util.ArrayList;
 
@@ -12,7 +14,7 @@ public class LightLocalizer {
   private static final int ROTATE_SPEED = 100;
   private static final long FREQUENCY = 10;
   private static final double D = 2;
-
+  private static final double TILE_SIZE = 30.48;
   ArrayList<Double> readingsArr = new ArrayList<>();
   ArrayList<Double> thetas = new ArrayList<>();
   private Odometer odometer;
@@ -54,7 +56,8 @@ public class LightLocalizer {
   public void localize() {
     
     gotoEstimatedOrigin();
-    startTime = System.currentTimeMillis();
+   
+    /**startTime = System.currentTimeMillis();
     navigation.turnCW(375);
     while (odometer.getXYT()[2] < 375) {
       thisColor = getFilteredData();
@@ -95,45 +98,97 @@ public class LightLocalizer {
     // travel to 0,0 using navigation class methods
     navigation.turnTo(0);
     navigation.travelTo(0, 0,false);
-    if(Lab5.startingCorner == 0) {
-		odometer.setX(1.0);
-		odometer.setY(1.0);
-		odometer.setTheta(0.0);
+  //localizaton ends
+  **/
+    int buttonChoice;
+    while (Button.waitForAnyPress() != Button.ID_ENTER) ;
+
+        odometer.setX(1.0*TILE_SIZE);
+		odometer.setY(1.0*TILE_SIZE);
+		
+		//odometer.setTheta(0.0);
+		//odometer.setTheta(0.0);
 		//navigation.counter_X = 1;
 		//navigator.counter_Y = 1;
-    }
+    /**}
     else if(Lab5.startingCorner == 1) {
 		// Face Forward
-		navigation.turnTo(90);
+	//	navigation.turnTo(90);
 		
-		odometer.setX(7.0);
-		odometer.setY(1.0);
-		odometer.setTheta(0.0);
+		odometer.setX(7.0*TILESIZE);
+		odometer.setY(1.0*TILESIZE);
+		odometer.setTheta(270);
 		//navigator.counter_X = 7;
 		//navigator.counter_Y = 1;
     }
     else if(Lab5.startingCorner == 2) {
-		odometer.setX(7.0);
-		odometer.setY(7.0);
+		odometer.setX(7.0*TILESIZE);
+		odometer.setY(7.0*TILESIZE);
 		odometer.setTheta(180.0);
 		//navigator.counter_X = 7;
 		//navigator.counter_Y = 7;
     }
     else {
 		// Face Forward
-		navigation.turnTo(90);
+	//	navigation.turnTo(90);
 		
-		odometer.setX(1.0);
-		odometer.setY(7.0);
-		odometer.setTheta(180.0);
+		odometer.setX(1.0*TILESIZE);
+		odometer.setY(7.0*TILESIZE);
+		odometer.setTheta(90.0);
 		//navigator.counter_X = 1;
 		//navigator.counter_Y = 7;
-    }
-    
-    navigation.travelTo(3, 3,false);
-    
-    navigation.rotateSensorMotor();
+    }  **/
+   
+   // navigation.rotateSensorMotor();
+    //						1,2
+   navigation.travelTo(Lab5.lowerLeftCorner[0], Lab5.lowerLeftCorner[1],true);
+   
  
+  odometer.setX(Lab5.lowerLeftCorner[0]*TILE_SIZE);
+   odometer.setY(Lab5.lowerLeftCorner[1]*TILE_SIZE);
+   //Delay.msDelay(20000);
+   //  navigation.travelTo(7,3 ,true);
+  /**  
+   // navigation.rotateSensorMotor();
+    navigation.travelTo(1, 2,true);
+    odometer.setX(1*TILE_SIZE);
+	odometer.setY(2*TILE_SIZE);
+   navigation.travelTo(1, 4,true);
+   odometer.setX(1*TILE_SIZE);
+	odometer.setY(4*TILE_SIZE);
+   
+   // navigation.turnCW(90);
+	
+   navigation.travelTo(4, 4,true);
+   odometer.setX(4*TILE_SIZE);
+	odometer.setY(4*TILE_SIZE);
+    
+    navigation.travelTo(4, 2,true);
+    odometer.setX(4*TILE_SIZE);
+	odometer.setY(2*TILE_SIZE);
+    
+    navigation.travelTo(1, 2,true);
+    odometer.setX(1*TILE_SIZE);
+	odometer.setY(2*TILE_SIZE);
+	*/
+  //  int diffy =Math.abs(Lab5.lowerLeftCorner[1]-Lab5.upperRightCorner[1]);
+  // navigation.travelTo(1, 6,true);
+    navigation.travelTo(Lab5.lowerLeftCorner[0], Lab5.upperRightCorner[1],true);
+    odometer.setX(Lab5.lowerLeftCorner[0]*TILE_SIZE);
+    odometer.setY(Lab5.upperRightCorner[1]*TILE_SIZE);
+    //Delay.msDelay(20000);
+    navigation.travelTo(Lab5.upperRightCorner[0], Lab5.upperRightCorner[1],true);
+    odometer.setX(Lab5.upperRightCorner[0]*TILE_SIZE);
+    odometer.setY(Lab5.upperRightCorner[1]*TILE_SIZE);
+    //Delay.msDelay(20000);
+    navigation.travelTo(Lab5.upperRightCorner[0], Lab5.lowerLeftCorner[1],true);
+    odometer.setX(Lab5.upperRightCorner[0]*TILE_SIZE);
+    odometer.setY(Lab5.lowerLeftCorner[1]*TILE_SIZE);
+    //Delay.msDelay(20000);
+    navigation.travelTo(Lab5.lowerLeftCorner[0], Lab5.lowerLeftCorner[1],true);
+    odometer.setX(Lab5.lowerLeftCorner[0]*TILE_SIZE);
+    odometer.setY(Lab5.lowerLeftCorner[1]*TILE_SIZE);
+
   }
 
   /** get reading from light sensor, manually synchronized for accuracy */

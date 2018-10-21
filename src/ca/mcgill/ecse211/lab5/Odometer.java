@@ -101,6 +101,7 @@ public class Odometer extends OdometerData implements Runnable {
     long updateStart, updateEnd;
     while (true) {
     	updateStart = System.currentTimeMillis();
+  
     		leftMotorTachoCount = leftMotor.getTachoCount();
     		rightMotorTachoCount = rightMotor.getTachoCount();
     		distL=3.1415926*WHEEL_RAD*(leftMotorTachoCount-lastTachoL)/180; // compute the distance travelled by the

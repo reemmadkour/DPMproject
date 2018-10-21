@@ -27,13 +27,13 @@ public class Lab5 {
 
 
   public static final int targetRing = 0;
-  public static final int startingCorner = 2;
-  public static final double WHEEL_RADIUS = 2.15;
-  public static final double TRACK = 10;
+  public static final int startingCorner = 1;
+  public static final double WHEEL_RADIUS = 2.06;
+  public static final double TRACK = 9.85;
   public static final double TAU = 360;
   
-  public static final int[][] lowerLeftCorner = {{ 0, 0 }};
-  public static final int[][] upperRightCorner = {{ 0, 0 }};
+  public static final int[] lowerLeftCorner = {1, 2};
+  public static final int[] upperRightCorner = {5, 6};
 
   public static void main(String[] args) throws OdometerExceptions {
     int buttonChoice;

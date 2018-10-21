@@ -25,7 +25,7 @@ public class Navigation {
 	public static final double TILE_SIZE=30.48;;
 	public static final int FORWARD_SPEED = 250;
 	private static final int ROTATE_SPEED = 150;
-	private final int US_ROTATION = 90; //constant for the US sensor rotation when bang bang starts/stops
+	private final int US_ROTATION = 270; //constant for the US sensor rotation when bang bang starts/stops
 	
 	
 	double dx, dy, dt;
@@ -50,7 +50,8 @@ public class Navigation {
 			//odometer.setXYT(0 , 0 , 0);
 			this.TRACK = TRACK;
 			this.WHEEL_RAD = WHEEL_RAD;
-			this.usMotor = sensorMotor;	
+			this.usMotor = sensorMotor;
+			usMotor.resetTachoCount();
 		}
 
 
@@ -59,9 +60,9 @@ public class Navigation {
 		 * Let the robot travel to the specified destination
 		 * @param x The x value of the destination
 		 * @param y The y value of the destination
-		 * @param obs If 
+		 * @param withTurn If 
 		 */
-		void travelTo(double x, double y,boolean obs) {
+		void travelTo(double x, double y,boolean withTurn) {
 			double calcTheta = 0, len = 0, deltaX = 0, deltaY = 0;
 
 	
@@ -80,15 +81,21 @@ public class Navigation {
 				calcTheta = 360 - Math.abs(calcTheta);
 
 			// turn to the found angle
-			//turnTo(calcTheta);
+			if(withTurn) {
+//				System.out.println("\n\n\n" + calcTheta);
+				turnTo(calcTheta);
+			}
 		
 
 			// go
 			leftMotor.setSpeed(FORWARD_SPEED);
 			rightMotor.setSpeed(FORWARD_SPEED);
 			leftMotor.rotate(convertDistance(WHEEL_RAD, len), true);
-			rightMotor.rotate(convertDistance(WHEEL_RAD, len), true);
+			rightMotor.rotate(convertDistance(WHEEL_RAD, len), false);
+			//odometer.setX(x*TILE_SIZE);
+			//odometer.setY(y*TILE_SIZE);
 
+			
 			
 		}
 		
@@ -98,7 +105,7 @@ public class Navigation {
 		void turnTo(double theta) {
 			boolean turnLeft = false; //to do the minimal turn
 			double deltaAngle = 0;
-			// get the delta nagle
+			// get the delta angle
 			odoAngle=odometer.getXYT()[2];
 			deltaAngle = theta - odoAngle;
 
@@ -185,6 +192,6 @@ public class Navigation {
   
   public void rotateSensorMotor() {
 	  usMotor.setSpeed(ROTATE_SPEED);
-	  usMotor.rotate(US_ROTATION);
+	  usMotor.rotateTo(-90);
   }
 }

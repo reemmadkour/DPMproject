@@ -124,7 +124,6 @@ public class UltrasonicLocalizer {
     }
 
     navigation.turnCCW(360);
-    t.drawString("CCW retun " , 0, 5);
     try {
       TimeUnit.SECONDS.sleep(2);
     } catch (Exception e) {
@@ -132,9 +131,7 @@ public class UltrasonicLocalizer {
 
     // checks for the other falling edge to assign to beta
     while (360+odometer.getXYT()[2]>0) {
-    	t.drawString("in second while" , 0, 4);
       if (fallingEdgeCaught()) {
-    	  t.drawString("second edge " , 0, 4);
         resetMotor();
         beta = odometer.getXYT()[2];
         break;
@@ -277,9 +274,6 @@ public class UltrasonicLocalizer {
       dTheta = (45) - ((alpha + beta) / 2); 
     }
 
-    t.drawString("alpha: " + alpha, 0, 4);
-    t.drawString("beta: " + beta, 0, 5);
-    t.drawString("dtheta: " + dTheta, 0, 6);
 
     odometer.setTheta(odometer.getXYT()[2] + dTheta);
 

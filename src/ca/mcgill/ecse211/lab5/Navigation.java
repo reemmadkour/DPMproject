@@ -23,7 +23,7 @@ public class Navigation {
 	private final double TRACK;
 	private final double WHEEL_RAD;
 	public static final double TILE_SIZE=30.48;;
-	public static final int FORWARD_SPEED = 250;
+	public static final int FORWARD_SPEED = 200;
 	private static final int ROTATE_SPEED = 150;
 	private final int US_ROTATION = 270; //constant for the US sensor rotation when bang bang starts/stops
 	
@@ -91,10 +91,18 @@ public class Navigation {
 			leftMotor.setSpeed(FORWARD_SPEED);
 			rightMotor.setSpeed(FORWARD_SPEED);
 			leftMotor.rotate(convertDistance(WHEEL_RAD, len), true);
-			rightMotor.rotate(convertDistance(WHEEL_RAD, len), false);
+			rightMotor.rotate(convertDistance(WHEEL_RAD, len), true);
 			//odometer.setX(x*TILE_SIZE);
 			//odometer.setY(y*TILE_SIZE);
-
+		while(isNavigating()) {
+		if(Lab5.inSquare) {
+	//
+				Lab5.oLocal.processUSData();
+				//rightMotor.stop();
+				//leftMotor.stop();
+				
+		}
+			}
 			
 			
 		}
@@ -171,6 +179,14 @@ public class Navigation {
     rightMotor.rotate(
         -convertAngle(Lab5.WHEEL_RADIUS, Lab5.TRACK, degree), true);
   }
+  
+  
+  public void turnCW2(long degree) {
+	    leftMotor.rotate(
+	        convertAngle(Lab5.WHEEL_RADIUS, Lab5.TRACK, degree), true);
+	    rightMotor.rotate(
+	        -convertAngle(Lab5.WHEEL_RADIUS, Lab5.TRACK, degree), false);
+	  }
 	/** turns the robot counterclockwise to a certaina angle
 	 * @param degree is and in degrees you want to turn to
 	 *

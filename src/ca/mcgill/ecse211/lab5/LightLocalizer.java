@@ -139,7 +139,7 @@ public class LightLocalizer {
 		//navigator.counter_Y = 7;
     }  **/
    
-   // navigation.rotateSensorMotor();
+    navigation.rotateSensorMotor();
     //						1,2
    navigation.travelTo(Lab5.lowerLeftCorner[0], Lab5.lowerLeftCorner[1],true);
    
@@ -173,6 +173,7 @@ public class LightLocalizer {
 	*/
   //  int diffy =Math.abs(Lab5.lowerLeftCorner[1]-Lab5.upperRightCorner[1]);
   // navigation.travelTo(1, 6,true);
+   Lab5.inSquare=true;
     navigation.travelTo(Lab5.lowerLeftCorner[0], Lab5.upperRightCorner[1],true);
     odometer.setX(Lab5.lowerLeftCorner[0]*TILE_SIZE);
     odometer.setY(Lab5.upperRightCorner[1]*TILE_SIZE);
@@ -188,7 +189,7 @@ public class LightLocalizer {
     navigation.travelTo(Lab5.lowerLeftCorner[0], Lab5.lowerLeftCorner[1],true);
     odometer.setX(Lab5.lowerLeftCorner[0]*TILE_SIZE);
     odometer.setY(Lab5.lowerLeftCorner[1]*TILE_SIZE);
-
+Lab5.inSquare=false;
   }
 
   /** get reading from light sensor, manually synchronized for accuracy */

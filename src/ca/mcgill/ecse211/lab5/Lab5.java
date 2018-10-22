@@ -25,16 +25,17 @@ public class Lab5 {
       new EV3LargeRegulatedMotor(LocalEV3.get().getPort("D"));
   private static final EV3LargeRegulatedMotor sensorMotor =  new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
 
-
+  public static final String color ="Green";
+  public static  boolean inSquare =false;
+  
   public static final int targetRing = 0;
   public static final int startingCorner = 1;
   public static final double WHEEL_RADIUS = 2.06;
   public static final double TRACK = 9.85;
   public static final double TAU = 360;
-  
   public static final int[] lowerLeftCorner = {1, 2};
   public static final int[] upperRightCorner = {5, 6};
-
+  public static ObjectLocalizer oLocal = null;
   public static void main(String[] args) throws OdometerExceptions {
     int buttonChoice;
 
@@ -46,7 +47,7 @@ public class Lab5 {
         new float[usDistance.sampleSize()]; // usData is the buffer in which data are returned
 
   
-
+   
     // buffer for sensor values
     float[] colorData = new float[colorSensor.getRedMode().sampleSize()];
 
@@ -79,8 +80,10 @@ public class Lab5 {
     Navigation navigation =
         new Navigation(odometer, leftMotor, rightMotor, sensorMotor, Lab5.TRACK, Lab5.WHEEL_RADIUS);
 
-
-    UltrasonicLocalizer ultrasoniclocal;
+    
+    oLocal = new ObjectLocalizer(usSensor, usData, leftMotor, rightMotor,odometer, navigation);
+   
+   UltrasonicLocalizer ultrasoniclocal;
     if (buttonChoice == Button.ID_LEFT) {
     	
       ultrasoniclocal =

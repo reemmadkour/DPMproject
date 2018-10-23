@@ -236,6 +236,6 @@ public class Navigation implements Runnable {
   
   public void rotateSensorMotor() {
 	  usMotor.setSpeed(ROTATE_SPEED);
-	  usMotor.rotateTo(-90);
+	  usMotor.rotateTo(-100);
   }
 }

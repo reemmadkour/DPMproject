@@ -3,6 +3,7 @@ package ca.mcgill.ecse211.lab5;
 import lejos.hardware.Sound;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.robotics.SampleProvider;
+import lejos.utility.Delay;
 
 public class ObjectLocalizer {
 	Navigation navigation;
@@ -29,7 +30,13 @@ static boolean bigFound=false;
 		this.navigation = navigation;
 	}
 
+	public static int convertDistance(double radius, double distance) {
+	    return (int) ((180.0 * distance) / (Math.PI * radius));
+	  }
 
+	  public static int convertAngle(double radius, double width, double angle) {
+	    return convertDistance(radius, Math.PI * width * angle / 360.0);
+	  }
 
 	public void processUSData() {/** processing the data measured by the US sensor  **/
 		ColorDetector detector = new ColorDetector(Lab5.colorSensor);
@@ -56,19 +63,19 @@ static boolean bigFound=false;
 				{
 					initialDistance = Distance;
 					while(counter <= 1000&&bigFound==false) {
-						if((Distance >= initialDistance-10 && Distance <= initialDistance + 10) ) {
+						if((Distance >= initialDistance-10 && Distance <= initialDistance + 10 && Distance > 5) ) {
 							counter ++; 
 							usSensor.fetchSample(distance, 0);
 							Distance= distance[0]*100;
 							//System.out.println(+Distance);
-							if(counter >= 40&&found==false) {
+							if(counter >= 70&&found==false) {
 								//System.out.println("inside loop");
 								x=odometer.getXYT()[0];
 								y=odometer.getXYT()[1];
 								
 								Lab5.inSquare=false;
 								navigation.turnCW2(70);
-								navigation.travelTo((x+(Distance/1.5))/30.48, y/30.48, false);
+								navigation.travelTo((x+(Distance/1.3))/30.48, y/30.48, false);
 								leftMotor.stop();
 							
 							   rightMotor.stop();
@@ -84,15 +91,24 @@ static boolean bigFound=false;
 							    	System.out.println("FALSE");
 							    	Sound.beep();
 							    	Sound.beep();
-							    	
-							    	leftMotor.backward();
-							    	rightMotor.backward();
-							    	int k=0;
-							    	while (k<7) {
-							    		k++;
-							    	}
-							    leftMotor.stop(true);
-							    rightMotor.stop(false);
+							    	navigation.turnCCW(60);
+							    	Delay.msDelay(3000);
+							    	leftMotor.setSpeed(120);
+									rightMotor.setSpeed(120);
+									leftMotor.rotate(convertDistance(2.1, 16), true);
+									rightMotor.rotate(convertDistance(2.1, 16), false);
+									Delay.msDelay(2000);
+							    	//leftMotor.forward();
+							    	//rightMotor.forward();
+							    	//leftMotor.backward();
+							    	//rightMotor.backward();
+							    	//int k=0;
+							    	//while (k<7) {
+							    		//Sound.beep();
+							    	//k++;
+							    //	}
+							   // leftMotor.stop(true);
+							    //rightMotor.stop(false);
 							    found=true;
 							    navigation.i--;} 
 								//...do comparison code here, if not the thingy then :

@@ -17,7 +17,8 @@ public class ObjectLocalizer {
 	private float Distance;
 	private float[] distance;
 	private float initialDistance;
-
+	private final double TRACK=Lab5.TRACK;
+	private final double WHEEL_RAD=Lab5.WHEEL_RADIUS;
 	private EV3LargeRegulatedMotor leftMotor;
 	private EV3LargeRegulatedMotor rightMotor;
 static boolean bigFound=false;
@@ -59,7 +60,7 @@ static boolean bigFound=false;
 				Distance= distance[0]*100;
 				//System.out.println(Distance);
 
-				if(Distance < 60)  /** if the value measure is within the range compared to the intial value measured increase the counter value**/
+				if(Distance < 50)  /** if the value measure is within the range compared to the intial value measured increase the counter value**/
 				{
 					initialDistance = Distance;
 					while(counter <= 1000&&bigFound==false) {
@@ -91,24 +92,25 @@ static boolean bigFound=false;
 							    	System.out.println("FALSE");
 							    	Sound.beep();
 							    	Sound.beep();
-							    	navigation.turnCCW(60);
+							    	leftMotor.rotate(-convertAngle(WHEEL_RAD, TRACK, 90), true);  
+									rightMotor.rotate(convertAngle(WHEEL_RAD, TRACK, 90), false);
+									
+									leftMotor.rotate(convertDistance(WHEEL_RAD, 25), true);
+									rightMotor.rotate(convertDistance(WHEEL_RAD, 25), false);
+									
+									leftMotor.rotate(convertAngle(WHEEL_RAD, TRACK, 90), true);
+									rightMotor.rotate(-convertAngle(WHEEL_RAD, TRACK, 90), false);
+									
+									leftMotor.rotate(convertDistance(WHEEL_RAD, 25), true);
+									rightMotor.rotate(convertDistance(WHEEL_RAD, 25), false);
+							    //	navigation.turnCCW(60);
 							    	Delay.msDelay(3000);
-							    	leftMotor.setSpeed(120);
-									rightMotor.setSpeed(120);
-									leftMotor.rotate(convertDistance(2.1, 16), true);
-									rightMotor.rotate(convertDistance(2.1, 16), false);
-									Delay.msDelay(2000);
-							    	//leftMotor.forward();
-							    	//rightMotor.forward();
-							    	//leftMotor.backward();
-							    	//rightMotor.backward();
-							    	//int k=0;
-							    	//while (k<7) {
-							    		//Sound.beep();
-							    	//k++;
-							    //	}
-							   // leftMotor.stop(true);
-							    //rightMotor.stop(false);
+							    	//leftMotor.setSpeed(120);
+									//rightMotor.setSpeed(120);
+									//leftMotor.rotate(convertDistance(2.1, 16), true);
+									//rightMotor.rotate(convertDistance(2.1, 16), false);
+									//Delay.msDelay(2000);
+							    
 							    found=true;
 							    navigation.i--;} 
 								//...do comparison code here, if not the thingy then :

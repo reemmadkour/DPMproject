@@ -18,7 +18,7 @@ public class Lab5 {
 
 
   private static final Port usPort = LocalEV3.get().getPort("S3");
-  private static final EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S2);
+  public static final EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S2);
   private static final EV3LargeRegulatedMotor leftMotor =
       new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
   private static final EV3LargeRegulatedMotor rightMotor =
@@ -30,11 +30,11 @@ public class Lab5 {
   
   public static final int targetRing = 0;
   public static final int startingCorner = 1;
-  public static final double WHEEL_RADIUS = 2.06;
-  public static final double TRACK = 9.85;
+  public static final double WHEEL_RADIUS = 2.1;
+  public static final double TRACK = 9.3;
   public static final double TAU = 360;
-  public static final int[] lowerLeftCorner = {1, 2};
-  public static final int[] upperRightCorner = {5, 6};
+  public static final int[] lowerLeftCorner = {2, 2};
+  public static final int[] upperRightCorner = {4, 4};
   public static ObjectLocalizer oLocal = null;
   public static void main(String[] args) throws OdometerExceptions {
     int buttonChoice;
@@ -61,8 +61,8 @@ public class Lab5 {
       // ask the user whether rising or falling edge
       t.drawString("< Left | Right >", 0, 0);
       t.drawString("       |        ", 0, 1);
-      t.drawString("Rising | Falling", 0, 2);
-      t.drawString(" edge  |   edge ", 0, 3);
+      t.drawString(" Color Falling", 0, 2);
+      t.drawString(" test  |   edge ", 0, 3);
       t.drawString("       |        ", 0, 4);
 
       buttonChoice = Button.waitForAnyPress();
@@ -85,6 +85,10 @@ public class Lab5 {
    
    UltrasonicLocalizer ultrasoniclocal;
     if (buttonChoice == Button.ID_LEFT) {
+    	
+    	ColorClassification coloring = new ColorClassification(colorSensor, usSensor, usData, t);
+    	t.clear();
+    	coloring.run();
     	
       ultrasoniclocal =
           new UltrasonicLocalizer(
@@ -110,7 +114,7 @@ public class Lab5 {
     ultrasoniclocal.localize();
 
     // ************** Change this to wait for 8 seconds **************
-    while (Button.waitForAnyPress() != Button.ID_ENTER) ;
+  //  while (Button.waitForAnyPress() != Button.ID_ENTER) ;
 
     // initializing the light localizer
     LightLocalizer ll =

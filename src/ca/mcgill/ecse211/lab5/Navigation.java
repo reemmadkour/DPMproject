@@ -6,7 +6,6 @@ import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.Port;
 import lejos.robotics.SampleProvider;
 
-
 import lejos.hardware.Button;
 
 /**creates a class to start the navigation
@@ -14,7 +13,7 @@ import lejos.hardware.Button;
  
  */
 
-public class Navigation {
+public class Navigation implements Runnable {
 
 	private EV3LargeRegulatedMotor leftMotor;
 	private EV3LargeRegulatedMotor rightMotor;
@@ -23,14 +22,14 @@ public class Navigation {
 	private final double TRACK;
 	private final double WHEEL_RAD;
 	public static final double TILE_SIZE=30.48;;
-	public static final int FORWARD_SPEED = 200;
-	private static final int ROTATE_SPEED = 150;
+	public static final int FORWARD_SPEED = 120;
+	private static final int ROTATE_SPEED = 120;
 	private final int US_ROTATION = 270; //constant for the US sensor rotation when bang bang starts/stops
 	
 	
 	double dx, dy, dt;
 
-	int i = 0;
+	public int i = 0;
 	public Odometer odometer;
 	//private OdometerData odoData;
 
@@ -54,6 +53,34 @@ public class Navigation {
 			usMotor.resetTachoCount();
 		}
 
+		
+		
+		 
+			public void run() {
+				for (EV3LargeRegulatedMotor motor : new EV3LargeRegulatedMotor[] {leftMotor, rightMotor}) {
+					motor.stop();
+					motor.setAcceleration(200);  // reduced the acceleration to make it smooth
+				}
+				// wait 5 seconds
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// there is nothing to be done here because it is not expected that
+					// the odometer will be interrupted by another thread
+				}
+				// implemented this for loop so that navigation will work for any number of points
+				
+				int waypoints[][] = new int[][] { {Lab5.lowerLeftCorner[0], Lab5.lowerLeftCorner[1]}, {Lab5.lowerLeftCorner[0], Lab5.upperRightCorner[1]}, {Lab5.upperRightCorner[0], Lab5.upperRightCorner[1]}, { Lab5.upperRightCorner[0], Lab5.lowerLeftCorner[1] }, { Lab5.lowerLeftCorner[0], Lab5.lowerLeftCorner[1] },{Lab5.upperRightCorner[0], Lab5.upperRightCorner[1]} };
+				
+				while(i<6) {
+					if (i>0) {Lab5.inSquare=true;}
+					travelTo(waypoints[i][0], waypoints[i][1],true);
+					
+					i++;
+				}
+			}
+		
+		
 
 		private static double odoAngle = 0;
 		/**
@@ -98,8 +125,8 @@ public class Navigation {
 		if(Lab5.inSquare) {
 	//
 				Lab5.oLocal.processUSData();
-				//rightMotor.stop();
-				//leftMotor.stop();
+				//rightMotor.stop(true);
+				//leftMotor.stop(false);
 				
 		}
 			}

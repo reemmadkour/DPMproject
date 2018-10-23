@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class LightLocalizer {
   
-  private static final int ROTATE_SPEED = 100;
+  private static final int ROTATE_SPEED = 120;
   private static final long FREQUENCY = 10;
   private static final double D = 2;
   private static final double TILE_SIZE = 30.48;
@@ -105,8 +105,16 @@ public class LightLocalizer {
 
         odometer.setX(1.0*TILE_SIZE);
 		odometer.setY(1.0*TILE_SIZE);
-		
-		//odometer.setTheta(0.0);
+		//navigation.turnCW(90);
+		odometer.setTheta(0.0);
+		leftMotor.resetTachoCount();
+		rightMotor.resetTachoCount();
+		Delay.msDelay(5000);
+		 odometer.setX(1.0*TILE_SIZE);
+			odometer.setY(1.0*TILE_SIZE);
+			odometer.setTheta(0.0);
+			//navigation.turnCW(90);
+			odometer.setTheta(0.0);
 		//odometer.setTheta(0.0);
 		//navigation.counter_X = 1;
 		//navigator.counter_Y = 1;
@@ -140,39 +148,15 @@ public class LightLocalizer {
     }  **/
    
     navigation.rotateSensorMotor();
+    
+    navigation.run();
     //						1,2
-   navigation.travelTo(Lab5.lowerLeftCorner[0], Lab5.lowerLeftCorner[1],true);
+ /**  navigation.travelTo(Lab5.lowerLeftCorner[0], Lab5.lowerLeftCorner[1],true);
    
  
   odometer.setX(Lab5.lowerLeftCorner[0]*TILE_SIZE);
    odometer.setY(Lab5.lowerLeftCorner[1]*TILE_SIZE);
-   //Delay.msDelay(20000);
-   //  navigation.travelTo(7,3 ,true);
-  /**  
-   // navigation.rotateSensorMotor();
-    navigation.travelTo(1, 2,true);
-    odometer.setX(1*TILE_SIZE);
-	odometer.setY(2*TILE_SIZE);
-   navigation.travelTo(1, 4,true);
-   odometer.setX(1*TILE_SIZE);
-	odometer.setY(4*TILE_SIZE);
-   
-   // navigation.turnCW(90);
-	
-   navigation.travelTo(4, 4,true);
-   odometer.setX(4*TILE_SIZE);
-	odometer.setY(4*TILE_SIZE);
-    
-    navigation.travelTo(4, 2,true);
-    odometer.setX(4*TILE_SIZE);
-	odometer.setY(2*TILE_SIZE);
-    
-    navigation.travelTo(1, 2,true);
-    odometer.setX(1*TILE_SIZE);
-	odometer.setY(2*TILE_SIZE);
-	*/
-  //  int diffy =Math.abs(Lab5.lowerLeftCorner[1]-Lab5.upperRightCorner[1]);
-  // navigation.travelTo(1, 6,true);
+  
    Lab5.inSquare=true;
     navigation.travelTo(Lab5.lowerLeftCorner[0], Lab5.upperRightCorner[1],true);
     odometer.setX(Lab5.lowerLeftCorner[0]*TILE_SIZE);
@@ -190,6 +174,7 @@ public class LightLocalizer {
     odometer.setX(Lab5.lowerLeftCorner[0]*TILE_SIZE);
     odometer.setY(Lab5.lowerLeftCorner[1]*TILE_SIZE);
 Lab5.inSquare=false;
+*/
   }
 
   /** get reading from light sensor, manually synchronized for accuracy */

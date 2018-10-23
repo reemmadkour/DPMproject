@@ -6,7 +6,7 @@ import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.robotics.SampleProvider;
 
 
-public class ColorDetector implements Runnable{
+public class ColorDetector{
 
 	private EV3ColorSensor cSensor;
 	private float[] colorSample;
@@ -33,10 +33,10 @@ public class ColorDetector implements Runnable{
 	private double nG;
 	private double nB;
 
-	private double dBlue;
-	private double dGreen;
-	private double dYellow;
-	private double dOrange;
+	private double Blue;
+	private double Green;
+	private double Yellow;
+	private double Orange;
 	//calculate normalized samples
 
 	//calculate deviation for each one
@@ -50,8 +50,7 @@ public class ColorDetector implements Runnable{
 	}
 	
 	
-	@Override
-	public void run() {
+	public boolean detect(String color) {
 
 		cSensor.setFloodlight(true);
 		SampleProvider csColors = cSensor.getRGBMode();
@@ -69,33 +68,34 @@ public class ColorDetector implements Runnable{
 			nB = B/(Math.sqrt(R*R + G*G + B*B));
 
 			//calculate deviation for each
-			dBlue = Math.sqrt(Math.pow(nR - mBlueR, 2) + Math.pow(nG - mBlueG, 2) + Math.pow(nB - mBlueB, 2));
-			dGreen = Math.sqrt(Math.pow(nR - mGreenR, 2) + Math.pow(nG - mGreenG, 2) + Math.pow(nB - mGreenB, 2));
-			dYellow = Math.sqrt(Math.pow(nR - mYellowR, 2) + Math.pow(nG - mYellowG, 2) + Math.pow(nB - mYellowB, 2));
-			dOrange = Math.sqrt(Math.pow(nR - mOrangeR, 2) + Math.pow(nG - mOrangeG, 2) + Math.pow(nB - mOrangeB, 2));
+			Blue = Math.sqrt(Math.pow(nR - mBlueR, 2) + Math.pow(nG - mBlueG, 2) + Math.pow(nB - mBlueB, 2));
+			Green = Math.sqrt(Math.pow(nR - mGreenR, 2) + Math.pow(nG - mGreenG, 2) + Math.pow(nB - mGreenB, 2));
+			Yellow = Math.sqrt(Math.pow(nR - mYellowR, 2) + Math.pow(nG - mYellowG, 2) + Math.pow(nB - mYellowB, 2));
+			Orange = Math.sqrt(Math.pow(nR - mOrangeR, 2) + Math.pow(nG - mOrangeG, 2) + Math.pow(nB - mOrangeB, 2));
 
-			double[] list = {dBlue, dGreen, dYellow, dOrange};
+			double[] list = {Blue, Green, Yellow, Orange};
 
 			//sorted array
 			Arrays.sort(list);
 
 			//print list[0] which is going to the detected color
 			
-			if(list[0] == dBlue) {
-				System.out.println("Blue");
+			if(list[0] == Blue && "Blue".equals(color)) {
+				return true;
 			}
 			
-			if(list[0] == dGreen) {
-				System.out.println("Green");
+			if(list[0] == Green && "Green".equals(color)) {
+				return true;
 			}
 			
-			if(list[0] == dYellow) {
-				System.out.println("Yellow");
+			if(list[0] == Yellow && "Yellow".equals(color)) {
+				return true;
 			}
 			
-			if(list[0] == dOrange) {
-				System.out.println("Orange");
+			if(list[0] == Orange && "Orange".equals(color)) {
+				return true;
 			}
+			return false;
 		}
 		// TODO Auto-generated method stub
 

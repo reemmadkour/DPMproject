@@ -1,5 +1,6 @@
 package ca.mcgill.ecse211.lab5;
 
+import lejos.hardware.Sound;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.robotics.SampleProvider;
 
@@ -18,7 +19,7 @@ public class ObjectLocalizer {
 
 	private EV3LargeRegulatedMotor leftMotor;
 	private EV3LargeRegulatedMotor rightMotor;
-
+static boolean bigFound=false;
 	public ObjectLocalizer(SampleProvider usSensor, float[] distance, EV3LargeRegulatedMotor leftMotor, EV3LargeRegulatedMotor rightMotor, Odometer odometer, Navigation navigation) {
 		this.distance = distance;
 		this.usSensor = usSensor;
@@ -31,18 +32,18 @@ public class ObjectLocalizer {
 
 
 	public void processUSData() {/** processing the data measured by the US sensor  **/
-
+		ColorDetector detector = new ColorDetector(Lab5.colorSensor);
 
 
 		int counter =0;
-        
+        boolean found=false;
 		// 
 		//leftMotor.setSpeed(200);
 		//rightMotor.setSpeed(200);
 		//rightMotor.forward();
 		//leftMotor.forward();
 
-		//while(true) {
+		if( bigFound==(false)) {
 			xx = odometer.getXYT()[0];
 			yy = odometer.getXYT()[1];
 
@@ -54,24 +55,39 @@ public class ObjectLocalizer {
 				if(Distance < 30)  /** if the value measure is within the range compared to the intial value measured increase the counter value**/
 				{
 					initialDistance = Distance;
-					while(counter <= 300) {
+					while(counter <= 1000&&bigFound==false) {
 						if((Distance >= initialDistance-10 && Distance <= initialDistance + 10) ) {
 							counter ++; 
 							usSensor.fetchSample(distance, 0);
 							Distance= distance[0]*100;
-							System.out.println(+Distance);
-							if(counter >= 20) {
-								System.out.println("inside loop");
+							//System.out.println(+Distance);
+							if(counter >= 20&&found==false) {
+								//System.out.println("inside loop");
 								x=odometer.getXYT()[0];
 								y=odometer.getXYT()[1];
 								
 								Lab5.inSquare=false;
-								navigation.turnCW2(90);
+								navigation.turnCW2(80);
 								navigation.travelTo((x+Distance)/30.48, y/30.48, false);
 								leftMotor.stop();
-								rightMotor.stop();
+							
+							   rightMotor.stop();
+							    if(detector.detect(Lab5.color)==true) {
+							    System.out.println("true");
+							    Sound.beep();
+							    found=true;
+							    bigFound=true;
+							    navigation.i=4;
+							   // break;
+							    }
+							    else {
+							    	System.out.println("FALSE");
+							    	Sound.beep();
+							    	Sound.beep();
+							    found=true;
+							    navigation.i--;} 
 								//...do comparison code here, if not the thingy then :
-								Lab5.inSquare=true;
+								//Lab5.inSquare=true;
 								break;
 								
 						}
@@ -82,7 +98,7 @@ public class ObjectLocalizer {
 							break;
 						}
 
-				//	}
+					}
 
 				}
 

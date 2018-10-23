@@ -113,7 +113,7 @@ public class ColorClassification implements Runnable {
 				
 				t.drawString(display, 0, 3);
 				try {
-					Thread.sleep(1200);
+					Thread.sleep(500);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

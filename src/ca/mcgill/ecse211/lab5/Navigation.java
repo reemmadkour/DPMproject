@@ -70,9 +70,9 @@ public class Navigation implements Runnable {
 				}
 				// implemented this for loop so that navigation will work for any number of points
 				
-				int waypoints[][] = new int[][] { {Lab5.lowerLeftCorner[0], Lab5.lowerLeftCorner[1]}, {Lab5.lowerLeftCorner[0], Lab5.upperRightCorner[1]}, {Lab5.upperRightCorner[0], Lab5.upperRightCorner[1]}, { Lab5.upperRightCorner[0], Lab5.lowerLeftCorner[1] }, { Lab5.lowerLeftCorner[0], Lab5.lowerLeftCorner[1] },{Lab5.upperRightCorner[0], Lab5.upperRightCorner[1]} };
+				int waypoints[][] = new int[][] { {Lab5.lowerLeftCorner[0], Lab5.lowerLeftCorner[1]}, {Lab5.lowerLeftCorner[0], Lab5.upperRightCorner[1]}, {Lab5.upperRightCorner[0], Lab5.upperRightCorner[1]}, { Lab5.upperRightCorner[0], Lab5.lowerLeftCorner[1] }, { Lab5.lowerLeftCorner[0], Lab5.lowerLeftCorner[1] },{Lab5.lowerLeftCorner[0]+1, Lab5.lowerLeftCorner[1]}, {Lab5.lowerLeftCorner[0]+1, Lab5.upperRightCorner[1]},{Lab5.upperRightCorner[0], Lab5.upperRightCorner[1]}};
 				
-				while(i<6) {
+				while(i<waypoints.length) {
 					if (i>0) {Lab5.inSquare=true;}
 					travelTo(waypoints[i][0], waypoints[i][1],true);
 					

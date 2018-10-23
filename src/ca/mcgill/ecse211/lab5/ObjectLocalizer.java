@@ -52,7 +52,7 @@ static boolean bigFound=false;
 				Distance= distance[0]*100;
 				//System.out.println(Distance);
 
-				if(Distance < 30)  /** if the value measure is within the range compared to the intial value measured increase the counter value**/
+				if(Distance < 60)  /** if the value measure is within the range compared to the intial value measured increase the counter value**/
 				{
 					initialDistance = Distance;
 					while(counter <= 1000&&bigFound==false) {
@@ -61,13 +61,13 @@ static boolean bigFound=false;
 							usSensor.fetchSample(distance, 0);
 							Distance= distance[0]*100;
 							//System.out.println(+Distance);
-							if(counter >= 30&&found==false) {
+							if(counter >= 40&&found==false) {
 								//System.out.println("inside loop");
 								x=odometer.getXYT()[0];
 								y=odometer.getXYT()[1];
 								
 								Lab5.inSquare=false;
-								navigation.turnCW2(80);
+								navigation.turnCW2(70);
 								navigation.travelTo((x+(Distance/1.5))/30.48, y/30.48, false);
 								leftMotor.stop();
 							
@@ -84,13 +84,21 @@ static boolean bigFound=false;
 							    	System.out.println("FALSE");
 							    	Sound.beep();
 							    	Sound.beep();
+							    	
 							    	leftMotor.backward();
 							    	rightMotor.backward();
+							    	int k=0;
+							    	while (k<7) {
+							    		k++;
+							    	}
+							    leftMotor.stop(true);
+							    rightMotor.stop(false);
 							    found=true;
 							    navigation.i--;} 
 								//...do comparison code here, if not the thingy then :
 								//Lab5.inSquare=true;
-								break;
+								
+							    break;
 								
 						}
 

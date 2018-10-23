@@ -7,6 +7,7 @@ import lejos.hardware.port.Port;
 import lejos.robotics.SampleProvider;
 
 import lejos.hardware.Button;
+import lejos.hardware.Sound;
 
 /**creates a class to start the navigation
  * @author reem madkour and usaid barlas
@@ -75,7 +76,7 @@ public class Navigation implements Runnable {
 				while(i<waypoints.length) {
 					if (i>0) {Lab5.inSquare=true;}
 					travelTo(waypoints[i][0], waypoints[i][1],true);
-					
+					if(i==0) {Sound.beep();}
 					i++;
 				}
 			}

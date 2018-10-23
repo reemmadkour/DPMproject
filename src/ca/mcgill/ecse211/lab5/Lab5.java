@@ -33,8 +33,8 @@ public class Lab5 {
 	public static final double WHEEL_RADIUS = 2.1;
 	public static final double TRACK = 9.1;
 	public static final double TAU = 360;
-	public static final int[] lowerLeftCorner = {1, 2};
-	public static final int[] upperRightCorner = {5, 6};
+	public static final int[] lowerLeftCorner = {1, 3};
+	public static final int[] upperRightCorner = {4,6 };
 	public static ObjectLocalizer oLocal = null;
 	public static void main(String[] args) throws OdometerExceptions {
 		int buttonChoice;
@@ -100,7 +100,7 @@ public class Lab5 {
 		} else {
 			Thread odoDisplayThread = new Thread(odometryDisplay);
 			odoDisplayThread.start();
-
+			
 			ultrasoniclocal =
 					new UltrasonicLocalizer(
 							odometer,

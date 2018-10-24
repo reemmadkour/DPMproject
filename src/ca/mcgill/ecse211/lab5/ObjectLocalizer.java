@@ -69,13 +69,13 @@ static boolean bigFound=false;
 							usSensor.fetchSample(distance, 0);
 							Distance= distance[0]*100;
 							//System.out.println(+Distance);
-							if(counter >= 70&&found==false) {
+							if(counter >= 63&&found==false) {
 								//System.out.println("inside loop");
 								x=odometer.getXYT()[0];
 								y=odometer.getXYT()[1];
 								
 								Lab5.inSquare=false;
-								navigation.turnCW2(70);
+								navigation.turnCW2(65);
 								navigation.travelTo((x+(Distance/1.3))/30.48, y/30.48, false);
 								leftMotor.stop();
 							
@@ -95,14 +95,14 @@ static boolean bigFound=false;
 							    	leftMotor.rotate(-convertAngle(WHEEL_RAD, TRACK, 90), true);  
 									rightMotor.rotate(convertAngle(WHEEL_RAD, TRACK, 90), false);
 									
-									leftMotor.rotate(convertDistance(WHEEL_RAD, 25), true);
-									rightMotor.rotate(convertDistance(WHEEL_RAD, 25), false);
+									leftMotor.rotate(convertDistance(WHEEL_RAD, 28), true);
+									rightMotor.rotate(convertDistance(WHEEL_RAD, 28), false);
 									
 									leftMotor.rotate(convertAngle(WHEEL_RAD, TRACK, 90), true);
 									rightMotor.rotate(-convertAngle(WHEEL_RAD, TRACK, 90), false);
 									
-									leftMotor.rotate(convertDistance(WHEEL_RAD, 25), true);
-									rightMotor.rotate(convertDistance(WHEEL_RAD, 25), false);
+									leftMotor.rotate(convertDistance(WHEEL_RAD, 28), true);
+									rightMotor.rotate(convertDistance(WHEEL_RAD, 28), false);
 							    //	navigation.turnCCW(60);
 							    	Delay.msDelay(3000);
 							    	//leftMotor.setSpeed(120);
